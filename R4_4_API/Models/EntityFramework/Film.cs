@@ -8,17 +8,18 @@ namespace R4_4_API.Models.EntityFramework
     public partial class Film
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("flm_id")]
         public int Id { get; set; }
 
         [Column("flm_titre")]
-        [StringLength(50)]
+        [StringLength(100)]
         public string Titre { get; set; } = null!;
 
         [Column("flm_resume")]
         public string? Resume { get; set; }
 
-        [Column("flm_datesortie")]
+        [Column("flm_datesortie", TypeName = "date")]
         public DateTime? Datesortie { get; set; }
 
         [Column("flm_duree", TypeName = "numeric(3,0)")]

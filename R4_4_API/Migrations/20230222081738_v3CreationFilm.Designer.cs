@@ -12,15 +12,14 @@ using R4_4_API.Models.EntityFramework;
 namespace R4_4_API.Migrations
 {
     [DbContext(typeof(LequmaContext))]
-    [Migration("20230221084658_CreationBDFilmRatings")]
-    partial class CreationBDFilmRatings
+    [Migration("20230222081738_v3CreationFilm")]
+    partial class v3CreationFilm
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "6.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -30,11 +29,12 @@ namespace R4_4_API.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("flm_id")
-                        .HasDefaultValueSql("nextval('film_id_seq'::regclass)");
+                        .HasColumnName("flm_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("Datesortie")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("date")
                         .HasColumnName("flm_datesortie");
 
                     b.Property<decimal?>("Duree")
@@ -52,8 +52,8 @@ namespace R4_4_API.Migrations
 
                     b.Property<string>("Titre")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("flm_titre");
 
                     b.HasKey("Id")
@@ -65,18 +65,14 @@ namespace R4_4_API.Migrations
             modelBuilder.Entity("R4_4_API.Models.EntityFramework.Notation", b =>
                 {
                     b.Property<int>("Utl_id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("utl_id");
 
                     b.Property<int>("Flm_id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("flm_id");
-
-                    b.Property<int>("FilmNotationId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UtilisateurNotationId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("note")
                         .HasColumnType("integer")
@@ -85,14 +81,11 @@ namespace R4_4_API.Migrations
                     b.HasKey("Utl_id", "Flm_id")
                         .HasName("pk_notation");
 
-                    b.HasIndex("FilmNotationId");
+                    b.HasIndex("Flm_id");
 
-                    b.HasIndex("UtilisateurNotationId");
+                    b.ToTable("notation", "r41_4");
 
-                    b.ToTable("Avis", t =>
-                        {
-                            t.HasCheckConstraint("ck_notation_note", "not_note between 0 and 5");
-                        });
+                    b.HasCheckConstraint("ck_notation_note", "not_note between 0 and 5");
                 });
 
             modelBuilder.Entity("R4_4_API.Models.EntityFramework.Utilisateur", b =>
@@ -100,16 +93,17 @@ namespace R4_4_API.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("utl_id")
-                        .HasDefaultValueSql("nextval('utilisateur_id_seq'::regclass)");
+                        .HasColumnName("utl_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Cp")
                         .HasColumnType("char(5)")
                         .HasColumnName("utl_cp");
 
-                    b.Property<DateTime>("Datecreation")
+                    b.Property<DateTime?>("Datecreation")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("date")
                         .HasColumnName("utl_datecreation")
                         .HasDefaultValueSql("current_date");
 
@@ -175,13 +169,13 @@ namespace R4_4_API.Migrations
                 {
                     b.HasOne("R4_4_API.Models.EntityFramework.Film", "FilmNotation")
                         .WithMany("NotationFilm")
-                        .HasForeignKey("FilmNotationId")
+                        .HasForeignKey("Flm_id")
                         .IsRequired()
                         .HasConstraintName("fk_notation_film");
 
                     b.HasOne("R4_4_API.Models.EntityFramework.Utilisateur", "UtilisateurNotation")
                         .WithMany("NotationUtilisateur")
-                        .HasForeignKey("UtilisateurNotationId")
+                        .HasForeignKey("Utl_id")
                         .IsRequired()
                         .HasConstraintName("fk_notation_utilisateur");
 

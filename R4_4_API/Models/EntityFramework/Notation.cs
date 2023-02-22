@@ -3,13 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace R4_4_API.Models.EntityFramework
 {
+    [Table("notation", Schema = "r41_4")]
     public partial class Notation
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("utl_id")]
         public int Utl_id { get; set; }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("flm_id")]
         public int Flm_id { get; set; }
 

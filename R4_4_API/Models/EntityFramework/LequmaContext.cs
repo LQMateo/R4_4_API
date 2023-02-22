@@ -22,6 +22,8 @@ public partial class LequmaContext : DbContext
 
     public virtual DbSet<Utilisateur> Utilisateurs { get; set; }
 
+
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -50,11 +52,13 @@ public partial class LequmaContext : DbContext
 
             entity.HasOne(d => d.FilmNotation)
                   .WithMany(p => p.NotationFilm)
+                  .HasForeignKey(d => d.Flm_id) 
                   .OnDelete(DeleteBehavior.ClientSetNull)
                   .HasConstraintName("fk_notation_film");
 
             entity.HasOne(d => d.UtilisateurNotation)
                   .WithMany(p => p.NotationUtilisateur)
+                  .HasForeignKey(d => d.Utl_id)
                   .OnDelete(DeleteBehavior.ClientSetNull)
                   .HasConstraintName("fk_notation_utilisateur");
 
@@ -68,18 +72,12 @@ public partial class LequmaContext : DbContext
         {
             entity.HasKey(e => e.Id)
                   .HasName("pk_film");
-
-            entity.Property(e => e.Id)
-                  .HasDefaultValueSql("nextval('film_id_seq'::regclass)");
         });
 
         modelBuilder.Entity<Utilisateur>(entity =>
         {
             entity.HasKey(e => e.Id)
                   .HasName("pk_utilisateur");
-
-            entity.Property(e => e.Id)
-                  .HasDefaultValueSql("nextval('utilisateur_id_seq'::regclass)");
             
         });
 

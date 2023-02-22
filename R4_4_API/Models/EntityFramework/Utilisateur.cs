@@ -9,6 +9,7 @@ namespace R4_4_API.Models.EntityFramework
     public partial class Utilisateur
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("utl_id")]
         public int Id { get; set; }
 
@@ -21,14 +22,19 @@ namespace R4_4_API.Models.EntityFramework
         public string? Prenom { get; set; }
 
         [Column("utl_mobile", TypeName="char(10)")]
+        [Phone]
+        [RegularExpression(@"^0[0-9]{9}$", ErrorMessage = "La longueur d’un téléphone doit être de 10 caractères.")]        
         public string? Mobile { get; set; }
 
-        [Column("utl_mail")]        
-        [StringLength(100)]        
+        [Required]
+        [Column("utl_mail")]
+        [EmailAddress(ErrorMessage = "La longueur d’un email doit être comprise entre 6 et 100 caractères.")]
         public string? Mail { get; set; }
 
         [Column("utl_pwd")]
-        [StringLength(64)]
+        [StringLength(64, MinimumLength = 12, ErrorMessage = "La longueur d’un email doit être comprise entre 6 et 100 caractères.")]
+
+        [RegularExpression(@"^(?=.[A-Z])(?=.\d)(?=.*[^\w\s]).{12,20}$", ErrorMessage = "La longueur d’un téléphone doit être de 10 caractères.")]
         public string? Pwd { get; set; }
 
         [Column("utl_rue")]
@@ -36,6 +42,7 @@ namespace R4_4_API.Models.EntityFramework
         public string? Rue { get; set; }
 
         [Column("utl_cp", TypeName = "char(5)")]
+        [RegularExpression(@"^[0-9]{5}$", ErrorMessage = "Le code postal doit faire 5 carctere")]
         public string? Cp { get; set; }
 
         [Column("utl_ville")]
@@ -52,8 +59,8 @@ namespace R4_4_API.Models.EntityFramework
         [Column("utl_longitude")]
         public float? Longitude { get; set; }
 
-        [Column("utl_datecreation")]
-        public DateTime Datecreation { get; set; }
+        [Column("utl_datecreation", TypeName = "date")]
+        public DateTime? Datecreation { get; set; }
 
         [InverseProperty("UtilisateurNotation")]
         public virtual ICollection<Notation> NotationUtilisateur { get; } = new List<Notation>();

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using R4_4_API.Models.EntityFramework;
@@ -11,9 +12,10 @@ using R4_4_API.Models.EntityFramework;
 namespace R4_4_API.Migrations
 {
     [DbContext(typeof(LequmaContext))]
-    partial class LequmaContextModelSnapshot : ModelSnapshot
+    [Migration("20230222080223_v2CreationFilm")]
+    partial class v2CreationFilm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +34,7 @@ namespace R4_4_API.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("Datesortie")
-                        .HasColumnType("date")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("flm_datesortie");
 
                     b.Property<decimal?>("Duree")
@@ -99,9 +101,9 @@ namespace R4_4_API.Migrations
                         .HasColumnType("char(5)")
                         .HasColumnName("utl_cp");
 
-                    b.Property<DateTime?>("Datecreation")
+                    b.Property<DateTime>("Datecreation")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("utl_datecreation")
                         .HasDefaultValueSql("current_date");
 

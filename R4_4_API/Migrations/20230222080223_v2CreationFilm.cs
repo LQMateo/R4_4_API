@@ -1,14 +1,13 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace R4_4_API.Migrations
 {
-    /// <inheritdoc />
-    public partial class CreationBDFilmRatings : Migration
+    public partial class v2CreationFilm : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
@@ -19,8 +18,9 @@ namespace R4_4_API.Migrations
                 schema: "r41_4",
                 columns: table => new
                 {
-                    flm_id = table.Column<int>(type: "integer", nullable: false, defaultValueSql: "nextval('film_id_seq'::regclass)"),
-                    flm_titre = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    flm_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    flm_titre = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     flm_resume = table.Column<string>(type: "text", nullable: true),
                     flm_datesortie = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     flm_duree = table.Column<decimal>(type: "numeric(3,0)", nullable: true),
@@ -36,7 +36,8 @@ namespace R4_4_API.Migrations
                 schema: "r41_4",
                 columns: table => new
                 {
-                    utl_id = table.Column<int>(type: "integer", nullable: false, defaultValueSql: "nextval('utilisateur_id_seq'::regclass)"),
+                    utl_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     utl_nom = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     utl_prenom = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     utl_mobile = table.Column<string>(type: "char(10)", nullable: true),
@@ -56,14 +57,13 @@ namespace R4_4_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Avis",
+                name: "notation",
+                schema: "r41_4",
                 columns: table => new
                 {
                     utl_id = table.Column<int>(type: "integer", nullable: false),
                     flm_id = table.Column<int>(type: "integer", nullable: false),
-                    not_note = table.Column<int>(type: "integer", nullable: false),
-                    FilmNotationId = table.Column<int>(type: "integer", nullable: false),
-                    UtilisateurNotationId = table.Column<int>(type: "integer", nullable: false)
+                    not_note = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,27 +71,23 @@ namespace R4_4_API.Migrations
                     table.CheckConstraint("ck_notation_note", "not_note between 0 and 5");
                     table.ForeignKey(
                         name: "fk_notation_film",
-                        column: x => x.FilmNotationId,
+                        column: x => x.flm_id,
                         principalSchema: "r41_4",
                         principalTable: "film",
                         principalColumn: "flm_id");
                     table.ForeignKey(
                         name: "fk_notation_utilisateur",
-                        column: x => x.UtilisateurNotationId,
+                        column: x => x.utl_id,
                         principalSchema: "r41_4",
                         principalTable: "utilisateur",
                         principalColumn: "utl_id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Avis_FilmNotationId",
-                table: "Avis",
-                column: "FilmNotationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Avis_UtilisateurNotationId",
-                table: "Avis",
-                column: "UtilisateurNotationId");
+                name: "IX_notation_flm_id",
+                schema: "r41_4",
+                table: "notation",
+                column: "flm_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_utilisateur_utl_mail",
@@ -101,11 +97,11 @@ namespace R4_4_API.Migrations
                 unique: true);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Avis");
+                name: "notation",
+                schema: "r41_4");
 
             migrationBuilder.DropTable(
                 name: "film",
