@@ -63,6 +63,6 @@ namespace R4_4_API.Models.EntityFramework
         public DateTime? Datecreation { get; set; }
 
         [InverseProperty("UtilisateurNotation")]
-        public virtual ICollection<Notation> NotationUtilisateur { get; } = new List<Notation>();
+        public virtual ICollection<Notation>? NotationUtilisateur { get; set; } = new List<Notation>();
     }
 }
