@@ -28,7 +28,7 @@ namespace R4_4_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IActionResult))]
         public async Task<ActionResult<IEnumerable<Utilisateur>>> GetUtilisateur()
         {
-            return dataRepository.GetAll();
+            return await dataRepository.GetAllAsync();
         }       
 
         // GET: api/Utilisateurs/5
@@ -37,7 +37,7 @@ namespace R4_4_API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Utilisateur>> GetUtilisateurById(int id)
         {
-            var utilisateur = dataRepository.GetById(id);
+            var utilisateur = await dataRepository.GetByIdAsync(id);
             //var utilisateur = await _context.Utilisateurs.FindAsync(id);
 
             if (utilisateur == null)
@@ -58,7 +58,7 @@ namespace R4_4_API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Utilisateur>> GetUtilisateurByEmail(string email)
         {
-            var utilisateur = dataRepository.GetByString(email);
+            var utilisateur = await dataRepository.GetByStringAsync(email);
             //var utilisateur = await _context.Utilisateurs.FirstAsync( e => e.Mail == email);
 
             if (utilisateur == null)
@@ -83,7 +83,7 @@ namespace R4_4_API.Controllers
                 return BadRequest();
             }
 
-            var userToUpdate = dataRepository.GetById(id);
+            var userToUpdate = await dataRepository.GetByIdAsync(id);
 
             if (userToUpdate == null)
             {
@@ -91,7 +91,7 @@ namespace R4_4_API.Controllers
             }
             else
             {
-                dataRepository.Update(userToUpdate.Value, utilisateur);
+                dataRepository.UpdateAsync(userToUpdate.Value, utilisateur);
                 return NoContent();
             }
 
@@ -131,7 +131,7 @@ namespace R4_4_API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            dataRepository.Add(utilisateur);
+            dataRepository.AddAsync(utilisateur);
             return CreatedAtAction("GetById", new { id = utilisateur.Id }, utilisateur);
         }
 
@@ -141,7 +141,7 @@ namespace R4_4_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteUtilisateur(int id)
         {
-            var utilisateur = dataRepository.GetById(id);
+            var utilisateur = await dataRepository.GetByIdAsync(id);
             //var utilisateur = await _context.Utilisateurs.FindAsync(id);
             if (utilisateur == null)
             {
@@ -150,7 +150,7 @@ namespace R4_4_API.Controllers
 
             /*_context.Utilisateurs.Remove(utilisateur);
             await _context.SaveChangesAsync();*/
-            dataRepository.Delete(utilisateur.Value);
+            dataRepository.DeleteAsync(utilisateur.Value);
 
             return NoContent();
         }

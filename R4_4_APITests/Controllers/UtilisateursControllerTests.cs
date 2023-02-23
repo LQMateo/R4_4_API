@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using R4_4_API.Controllers;
+using R4_4_API.Models.DataManager;
 using R4_4_API.Models.EntityFramework;
+using R4_4_API.Models.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,17 +19,21 @@ namespace R4_4_API.Controllers.Tests
     {
         private readonly LequmaContext _context;
         private readonly UtilisateursController _controller;
+        private IDataRepository<Utilisateur> dataRepository;
+
+
         public UtilisateursControllerTests()
         {
             var builder = new DbContextOptionsBuilder<LequmaContext>().UseNpgsql("Server=51.83.36.122; port=5432; Database=lequma; uid=lequma; password=thrzJ1; SearchPath=r41_4;"); 
             _context = new LequmaContext(builder.Options);
-            _controller = new UtilisateursController(_context);
+            dataRepository = new UtilisateurManager(_context);
+            _controller = new UtilisateursController(dataRepository);
         }
 
         [TestMethod()]
         public async Task GetUtilisateursTestAsync()
         {
-            ActionResult<IEnumerable<Utilisateur>> users = await _controller.GetUtilisateur();
+            ActionResult<IEnumerable<Utilisateur>> users = await _controller.GetUtilisateur();            
 
             bool rep = true;
             for (int i = 0; i < _context.Utilisateurs.Count(); i++)            
