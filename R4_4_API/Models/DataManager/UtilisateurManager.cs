@@ -28,7 +28,7 @@ namespace R4_4_API.Models.DataManager
         public async Task AddAsync(Utilisateur entity)
         {
             filmsDbContext.Utilisateurs.AddAsync(entity);
-            filmsDbContext.SaveChangesAsync();
+            await filmsDbContext.SaveChangesAsync();
         }
         public async Task UpdateAsync(Utilisateur utilisateur, Utilisateur entity)
         {

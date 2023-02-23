@@ -91,7 +91,7 @@ namespace R4_4_API.Controllers
             }
             else
             {
-                dataRepository.UpdateAsync(userToUpdate.Value, utilisateur);
+                await dataRepository.UpdateAsync(userToUpdate.Value, utilisateur);
                 return NoContent();
             }
 
@@ -131,7 +131,7 @@ namespace R4_4_API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            dataRepository.AddAsync(utilisateur);
+            await dataRepository.AddAsync(utilisateur);
             return CreatedAtAction("GetById", new { id = utilisateur.Id }, utilisateur);
         }
 
@@ -150,7 +150,7 @@ namespace R4_4_API.Controllers
 
             /*_context.Utilisateurs.Remove(utilisateur);
             await _context.SaveChangesAsync();*/
-            dataRepository.DeleteAsync(utilisateur.Value);
+            await dataRepository.DeleteAsync(utilisateur.Value);
 
             return NoContent();
         }

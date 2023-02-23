@@ -64,5 +64,6 @@ namespace R4_4_API.Models.EntityFramework
 
         [InverseProperty("UtilisateurNotation")]
         public virtual ICollection<Notation>? NotationUtilisateur { get; set; } = new List<Notation>();
+        
     }
 }

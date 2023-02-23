@@ -31,5 +31,6 @@ namespace R4_4_API.Models.EntityFramework
 
         [InverseProperty("FilmNotation")]
         public virtual ICollection<Notation> NotationFilm { get; } = new List<Notation>();
+       
     }
 }
