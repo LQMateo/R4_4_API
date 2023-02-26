@@ -72,16 +72,21 @@ namespace R4_4_API.Controllers
 
         // PUT: api/Utilisateurs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IActionResult))]
+        [HttpPut("{id}")]        
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PutUtilisateur(int id, Utilisateur utilisateur)
         {
             if (id != utilisateur.Id)
             {
                 return BadRequest();
             }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
 
             var userToUpdate = await dataRepository.GetByIdAsync(id);
 
@@ -94,32 +99,12 @@ namespace R4_4_API.Controllers
                 dataRepository.UpdateAsync(userToUpdate.Value, utilisateur);
                 return NoContent();
             }
-
-            /*_context.Entry(utilisateur).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UtilisateurExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();*/
         }
 
         // POST: api/Utilisateurs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Utilisateur))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Utilisateur>> PostUtilisateur(Utilisateur utilisateur)
         {
@@ -132,7 +117,7 @@ namespace R4_4_API.Controllers
                 return BadRequest(ModelState);
             }
             dataRepository.AddAsync(utilisateur);
-            return CreatedAtAction("GetById", new { id = utilisateur.Id }, utilisateur);
+            return CreatedAtAction("GetUtilisateurById", new { id = utilisateur.Id }, utilisateur);
         }
 
         // DELETE: api/Utilisateurs/5

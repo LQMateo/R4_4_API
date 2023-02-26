@@ -29,17 +29,15 @@ namespace R4_4_API.Models.EntityFramework
         [Required]
         [Column("utl_mail")]
         [EmailAddress(ErrorMessage = "La longueur d’un email doit être comprise entre 6 et 100 caractères.")]
-        public string? Mail { get; set; }
+        public string? Mail { get; set; } = null!;
 
         [Column("utl_pwd")]
-        [StringLength(64, MinimumLength = 12, ErrorMessage = "La longueur d’un email doit être comprise entre 6 et 100 caractères.")]
-
-        [RegularExpression(@"^(?=.[A-Z])(?=.\d)(?=.*[^\w\s]).{12,20}$", ErrorMessage = "La longueur d’un téléphone doit être de 10 caractères.")]
-        public string? Pwd { get; set; }
+        //[RegularExpression(@"^(?=.[A-Z])(?=.\d)(?=.*[^\w\s]).{12,20}$", ErrorMessage = "La MDP doit être d'au moins 12 caractères avec une maj, une minuscule, un nombre et caractère spécial")]
+        public string? Pwd { get; set; } = null!;
 
         [Column("utl_rue")]
         [StringLength(200)]
-        public string? Rue { get; set; }
+        public string Rue { get; set; } = null!;
 
         [Column("utl_cp", TypeName = "char(5)")]
         [RegularExpression(@"^[0-9]{5}$", ErrorMessage = "Le code postal doit faire 5 carctere")]
@@ -51,7 +49,7 @@ namespace R4_4_API.Models.EntityFramework
 
         [Column("utl_pays")]
         [StringLength(50)]
-        public string? Pays { get; set; }
+        public string? Pays { get; set; } = "France";
 
         [Column("utl_latitude")]        
         public float? Latitude { get; set; }
@@ -60,7 +58,7 @@ namespace R4_4_API.Models.EntityFramework
         public float? Longitude { get; set; }
 
         [Column("utl_datecreation", TypeName = "date")]
-        public DateTime? Datecreation { get; set; }
+        public DateTime Datecreation { get; set; }
 
         [InverseProperty("UtilisateurNotation")]
         public virtual ICollection<Notation>? NotationUtilisateur { get; set; } = new List<Notation>();

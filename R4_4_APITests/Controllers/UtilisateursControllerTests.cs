@@ -74,7 +74,7 @@ namespace R4_4_API.Controllers.Tests
         public async Task PutUtilisateurTest()
         {
             Utilisateur user = _context.Utilisateurs.Find(1);
-            String newName = user.Nom + "prout";
+            String newName = user.Nom + "test";
             user.Nom = newName;
             _controller.PutUtilisateur(1, user);
 

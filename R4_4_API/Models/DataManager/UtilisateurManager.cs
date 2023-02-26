@@ -8,11 +8,13 @@ namespace R4_4_API.Models.DataManager
     public class UtilisateurManager : IDataRepository<Utilisateur>
     {
         readonly LequmaContext? filmsDbContext;
+
         public UtilisateurManager() { }
         public UtilisateurManager(LequmaContext context)
         {
             filmsDbContext = context;
         }
+
         public async Task<ActionResult<IEnumerable<Utilisateur>>> GetAllAsync()
         {
             return await filmsDbContext.Utilisateurs.ToListAsync();
@@ -31,7 +33,7 @@ namespace R4_4_API.Models.DataManager
             filmsDbContext.SaveChangesAsync();
         }
         public async Task UpdateAsync(Utilisateur utilisateur, Utilisateur entity)
-        {
+        {            
             filmsDbContext.Entry(utilisateur).State = EntityState.Modified;
             utilisateur.Id = entity.Id;
             utilisateur.Nom = entity.Nom;
@@ -46,12 +48,12 @@ namespace R4_4_API.Models.DataManager
             utilisateur.Pwd = entity.Pwd;
             utilisateur.Mobile = entity.Mobile;
             utilisateur.NotationUtilisateur = entity.NotationUtilisateur;
-            filmsDbContext.SaveChangesAsync();
+            filmsDbContext.SaveChanges();
         }
         public async Task DeleteAsync(Utilisateur utilisateur)
         {
             filmsDbContext.Utilisateurs.Remove(utilisateur);
-            filmsDbContext.SaveChangesAsync();
+            filmsDbContext.SaveChanges();
         }
     }
 }
